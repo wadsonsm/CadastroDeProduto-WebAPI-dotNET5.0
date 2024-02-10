@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProductRegistration.Domain.Models
 {
-    public class Product
+    public class Product : BaseEntity
     {
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }

@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProductRegistration.API.DataContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,10 @@ namespace ProductRegistration
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddDbContext<MyDataContext>(options =>
+            {
+                options.UseSqlite(Configuration.GetConnectionString("ConexaoSqLite"));
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -47,6 +53,8 @@ namespace ProductRegistration
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 
