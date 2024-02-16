@@ -48,7 +48,7 @@ namespace ProductRegistration.API.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateProduct")]
+        [Route("UpdateProduct/{id}")]
         public async Task<ActionResult<Product>> Update(Guid id, Product product)
         {
             if (id != product.Id)
@@ -56,21 +56,14 @@ namespace ProductRegistration.API.Controllers
                 return BadRequest();
             }
 
-            var productData = await _context.Products.FindAsync(id);
-            if (productData == null)            
-                return NotFound();
-            
-            if(!ModelState.IsValid)
-                return BadRequest();
-
-            _context.Entry(productData).State = EntityState.Modified;
+            _context.Products.Update(product);
             await _context.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpDelete]
-        [Route("DeleteProduct")]
+        [Route("DeleteProduct{id}")]
         public async Task<ActionResult<Product>> Delete(Guid id)
         {
             var product = _context.Products.Find(id);
